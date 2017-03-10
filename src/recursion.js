@@ -1,38 +1,117 @@
 /* jshint esversion: 6 */
 
 // Solve the following prompts using recursion.
-
+var log = console.log;
 // 1. Calculate the factorial of a number. The factorial of a non-negative integer n,
 // denoted by n!, is the product of all positive integers less than or equal to n.
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  if (n === 1) {
+    return n;
+  }
+  return n * factorial(n - 1);
 };
+
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
-var sum = function(array) {
+var sum = function(array, total = 0, copy) {
+  copy = copy || array.slice(0)
+  if (copy.length === 0) {
+    return total;
+  }
+  total += copy.pop();
+  return sum(copy, total);
 };
+// log(sum([1, 2, 3, 4, 5, 6]));
+
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array) {
-};
+var arraySum = function (array) {
+  var sum = 0;
+  for (let i = 0; i < array.length; i++) {
+    if (Array.isArray(array[i])) {
+      sum += arraySum(array[i]);
+    } else {
+      sum += array[i];
+    }    
+  }
+  return sum;
+}
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  if (n > 0){
+    if (n === 1) {
+      return false;
+    } 
+    if (n === 0) {
+      return true;
+    }
+    return isEven(n - 2);
+  } else {
+    if (n === -1) {
+      return false;
+    } 
+    if (n === 0) {
+      return true;
+    }
+    return isEven(n + 2);
+  }
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  if (n >= 0) {
+    if (n === 0) {
+      return n;
+    }
+    return (n + sumBelow(n - 1)) - 1;
+  } else if (n <= 0) {
+    if (n === 0) {
+      return n;
+    }
+    return (n + sumBelow(n + 1)) + 1;
+  }
 };
+// log(sumBelow(10))
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  if (x > y) {
+    if (x - y === 2) {
+      return [y + 1];
+    } else {
+      var otherList = range(x - 1, y);
+      otherList.unshift(x - 1);
+      return otherList;
+    }
+  } else {
+    if (y - x === 0 || y - x === 1) {
+      return [];
+    }
+    if (y - x === 2) {
+      return [x + 1];
+    } else {
+      var list = range(x, y - 1);
+      list.push(y - 1);
+      return list;
+    }
+  }
 };
+log(range(7, 2));
+log(range(2, 7));
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -148,7 +227,11 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // Example: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34.....
 // fibonacci(5); // [0,1,1,2,3,5]
 // Note: The 0 is not counted.
-var fibonacci = function(n) {
+var fibonacci = function(n, list = []) {
+  if (n === 0 || n === 1) {
+    return list.push(n);
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2);
 };
 
 // 26. Return the Fibonacci number located at index n of the Fibonacci sequence.
